@@ -23,7 +23,11 @@ fields
 
     themes.id,
     themes.name,
-    themes.slug;
+    themes.slug,
+
+    game_modes.id,
+    game_modes.name,
+    game_modes.slug;
 
 where total_rating != null;
 

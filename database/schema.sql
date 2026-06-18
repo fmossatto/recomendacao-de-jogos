@@ -142,7 +142,16 @@ CREATE TABLE jogo_modo (
     jogo_id INTEGER NOT NULL,
     modo_id INTEGER NOT NULL,
 
-    PRIMARY KEY (jogo_id, modo_id)
+    PRIMARY KEY (
+        jogo_id,
+        modo_id
+    ),
+
+    FOREIGN KEY (jogo_id)
+        REFERENCES jogos(id),
+
+    FOREIGN KEY (modo_id)
+        REFERENCES modos_jogo(id)
 );
 
 CREATE TABLE jogo_empresa (
@@ -191,3 +200,29 @@ join plataformas p
 group by p.nome
 order by total desc
 limit 20;
+
+--JOGOS POR MODO DE JOGO
+select
+    m.nome,
+    count(*) as total
+from jogo_modo jm
+join modos_jogo m
+    on m.id = jm.modo_id
+group by m.nome
+order by total desc;
+
+
+-- UTILITÁRIOS
+-- DROPAR TABELAS 
+
+TRUNCATE TABLE
+    jogo_tema,
+    temas,
+    jogo_plataforma,
+    plataformas,
+    jogo_genero,
+    generos,
+    jogos,
+    jogo_modo,
+    modos_jogo 
+RESTART IDENTITY CASCADE;

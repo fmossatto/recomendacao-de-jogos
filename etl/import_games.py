@@ -8,7 +8,9 @@ from database.models import (
     Plataforma,
     JogoPlataforma,
     Tema,
-    JogoTema
+    JogoTema,
+    ModoJogo,
+    JogoModo
 )
 
 from etl.igdb_client import execute_query
@@ -168,6 +170,41 @@ def importar_jogos():
                     JogoTema(
                         jogo_id=novo_jogo.id,
                         tema_id=tema.id
+                    )
+                )
+
+        
+        for modo_data in game.get("game_modes", []):
+            modo = (
+                session.query(ModoJogo)
+                .filter_by(igdb_id=modo_data["id"])
+                .first()
+            )
+
+            if not modo:
+                modo = ModoJogo(
+                    igdb_id=modo_data["id"],
+                    nome=modo_data["name"],
+                    slug=modo_data["slug"]
+                )
+
+                session.add(modo)
+                session.flush()
+
+            relacao = (
+                session.query(JogoModo)
+                .filter_by(
+                    jogo_id=novo_jogo.id,
+                    modo_id=modo.id
+                )
+                .first()
+            )
+
+            if not relacao:
+                session.add(
+                    JogoModo(
+                        jogo_id=novo_jogo.id,
+                        modo_id=modo.id
                     )
                 )
 

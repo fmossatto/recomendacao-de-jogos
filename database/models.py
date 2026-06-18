@@ -124,6 +124,33 @@ class JogoTema(Base):
     )
 
 
+class ModoJogo(Base):
+    __tablename__ = "modos_jogo"
+
+    id = Column(Integer, primary_key=True)
+
+    igdb_id = Column(BigInteger, unique=True)
+
+    nome = Column(String(100))
+
+    slug = Column(String(100))
+
+
+class JogoModo(Base):
+    __tablename__ = "jogo_modo"
+
+    jogo_id = Column(
+        Integer,
+        ForeignKey("jogos.id"),
+        primary_key=True
+    )
+
+    modo_id = Column(
+        Integer,
+        ForeignKey("modos_jogo.id"),
+        primary_key=True
+    )
+
 class Empresa(Base):
     __tablename__ = "empresas"
 
